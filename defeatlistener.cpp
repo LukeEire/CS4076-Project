@@ -5,12 +5,12 @@
 #include "game.h"
 
 // DefeatListener.cpp
-DefeatListener::DefeatListener(Game *game)
+DefeatListener::DefeatListener(Game* game)
 {
     this->game = game;
 }
 
-void DefeatListener::run(void *)
+void DefeatListener::run(void*)
 {
     cout << endl;
     cout << "Defeat!" << endl;

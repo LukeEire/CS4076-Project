@@ -1,12 +1,11 @@
 #include "character.h"
-
 #include "eventmanager.h"
 
 Character::Character(string name)
 {
-    this->name  = name; // We need to use "this->" to differentiate between the "name" argument and the "name" from the class.
-    health      = 100;
-    stamina     = 100;
+    this->name = name; // We need to use "this->" to differentiate between the "name" argument and the "name" from the class.
+    health = 100;
+    stamina = 10;
     currentRoom = nullptr;
 }
 
@@ -25,7 +24,7 @@ int Character::getStamina()
     return stamina;
 }
 
-Room *Character::getCurrentRoom()
+Room* Character::getCurrentRoom()
 {
     return currentRoom;
 }
@@ -55,7 +54,7 @@ void Character::setStamina(int stamina)
     this->stamina = stamina;
 }
 
-void Character::setCurrentRoom(Room *next)
+void Character::setCurrentRoom(Room* next)
 {
     currentRoom = next;
 }

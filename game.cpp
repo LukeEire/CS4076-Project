@@ -20,7 +20,8 @@
 Game::Game() :
     player("Hero")
 {
-    srand(time(nullptr));
+    srand(time(nullptr
+               ));
 
     // Commands
     EventManager::getInstance().listen("go",        new GoListener(this));

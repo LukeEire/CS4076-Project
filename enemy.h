@@ -1,5 +1,5 @@
-#ifndef CHARACTER_H
-#define CHARACTER_H
+#ifndef ENEMY_H
+#define ENEMY_H
 
 #include<string>
 
@@ -10,26 +10,24 @@ using namespace std;
 // This is called a "forward declaration".
 class Room;
 
-class Character
+class Enemy
 {
 public:
-    Character(string name);
+    Enemy(string name);
 
     string getName();
     int    getHealth();
-    int    getStamina();
     Room* getCurrentRoom();
 
     void setName(string name);
     void setHealth(int setHealth);
-    void setStamina(int stamina);
     void setCurrentRoom(Room* next);
 
 private:
     string name;
     int health;
-    int stamina;
     Room* currentRoom;
 };
 
-#endif // CHARACTER_H
+#endif // ENEMY_H
+#pragma once
