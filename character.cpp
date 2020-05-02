@@ -5,7 +5,7 @@ Character::Character(string name)
 {
     this->name = name; // We need to use "this->" to differentiate between the "name" argument and the "name" from the class.
     health = 100;
-    stamina = 10;
+    stamina = 100;
     currentRoom = nullptr;
 }
 

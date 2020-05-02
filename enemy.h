@@ -14,19 +14,22 @@ class Enemy
 {
 public:
     Enemy(string name);
+    Enemy();
+    ~Enemy();
 
     string getName();
     int    getHealth();
     Room* getCurrentRoom();
 
-    void setName(string name);
-    void setHealth(int setHealth);
-    void setCurrentRoom(Room* next);
-
-private:
     string name;
     int health;
     Room* currentRoom;
+
+    void setName(string name);
+    virtual void setHealth(int setHealth);
+    virtual void setRoom(Room* next);
+
+private:
 };
 
 #endif // ENEMY_H
