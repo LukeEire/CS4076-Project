@@ -2,6 +2,7 @@
 #define CHARACTER_H
 
 #include<string>
+#include "item.h"
 
 using namespace std;
 
@@ -18,6 +19,8 @@ public:
     string getName();
     int    getHealth();
     int    getStamina();
+    int    getDamage();
+    string getInventory();
     Room* getCurrentRoom();
 
     void setName(string name);
@@ -29,6 +32,8 @@ private:
     string name;
     int health;
     int stamina;
+    int damage;
+    vector<Item> inventory;
     Room* currentRoom;
 };
 

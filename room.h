@@ -27,12 +27,12 @@ public:
     int numberOfMinion();
     void addMinion(Minion* inMinion);
     int isMinionInRoom(string inString);
+    //vector <Boss> bossInRoom;
+    //vector <Minion> minionInRoom;
 
 private:
     string name;
     map<string, Room *> exits;
-
-    //The bitch boy problem is with the vector and dealing with the boss object being added to a room fuck yeah im gonna fuck this bitch up tomorrow
     vector <Boss> bossInRoom;
     vector <Minion> minionInRoom;
 };

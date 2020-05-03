@@ -17,6 +17,8 @@ public:
 
 	void setRoom(Room* next) override;
 	void setHealth(int health) override;
+	Room* getRoom();
+	void killBoss();
 private:
 };
 

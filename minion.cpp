@@ -5,7 +5,7 @@
 Minion::Minion(string name)
 {
     this->name = name; // We need to use "this->" to differentiate between the "name" argument and the "name" from the class.
-    health = 75;
+    health = 15;
     currentRoom = nullptr;
 }
 
@@ -26,4 +26,14 @@ void Minion::setHealth(int health)
 void Minion::setRoom(Room* bossR)
 {
     currentRoom = bossR;
+}
+
+Room* Minion::getRoom()
+{
+    return currentRoom;
+}
+
+void Minion::killMinion()
+{
+    this->~Minion();
 }

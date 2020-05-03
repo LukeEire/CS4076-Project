@@ -46,8 +46,9 @@ string Room::displayBoss() {
     }
     else if(bossInRoom.size() > 0) {
         int x = 0;
+        string tempName = bossInRoom[x].getName() + "\n";
         for (int y = bossCount; y > 0; y--) {
-            temp = temp + bossInRoom[x].getName() + " ";
+            temp = temp + tempName;
             x++;
         }
     }
@@ -94,13 +95,30 @@ string Room::displayMinion() {
     }
     else if (minionInRoom.size() > 0) {
         int x = 0;
+        string tempName = minionInRoom[x].getName() + "\n";
+        for (int y = minionCount; y > 0; y--) {
+            temp = temp + tempName;
+            x++;
+        }
+    }
+    return temp;
+}
+    
+    
+    /*string temp = "Enemy Spotted! \nEnemies present = ";
+    int minionCount = (minionInRoom.size());
+    if (minionInRoom.size() < 1) {
+        temp = "The coast is clear";
+    }
+    else if (minionInRoom.size() > 0) {
+        int x = 0;
         for (int y = minionCount; y > 0; y--) {
             temp = temp + minionInRoom[x].getName() + " ";
             x++;
         }
     }
     return temp;
-}
+}*/
 
 int Room::numberOfMinion() {
     return minionInRoom.size();

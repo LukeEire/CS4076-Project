@@ -5,6 +5,7 @@
 #include<vector>
 
 #include "character.h"
+#include "enemy.h"
 #include "room.h"
 
 using namespace std;
@@ -19,17 +20,23 @@ public:
     void info();
     void go(string direction);
     void teleport();
+    void attack();
 
     void update_screen();
 
     Character &getPlayer();
     void setOver(bool over);
     bool is_over();
-    void setCurrentRoom(Room *next);
+    //Dont know if this is needed
+    //void setCurrentRoom(Room *next);
 
 private:
     Character      player;
-    vector<Room *> rooms;
+    vector<Room*> rooms;
+    vector<Minion*> minions;
+    vector<Room*> minionRooms;
+    vector<Boss*> bossS;
+    vector<Room*> bossRooms;
     bool           gameOver;
 };
 #endif // GAME_H

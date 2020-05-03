@@ -9,10 +9,12 @@
 #include "golistener.h"
 #include "maplistener.h"
 #include "infolistener.h"
+#include "attacklistener.h"
 #include "restartlistener.h"
 #include "teleportlistener.h"
 #include "exitlistener.h"
 #include "characterdeathlistener.h"
+#include "enemydeathlistener.h"
 #include "enterroomlistener.h"
 #include "victorylistener.h"
 #include "defeatlistener.h"
@@ -30,9 +32,12 @@ Game::Game() :
     EventManager::getInstance().listen("restart",   new RestartListener(this));
     EventManager::getInstance().listen("teleport",  new TeleportListener(this));
     EventManager::getInstance().listen("exit",      new ExitListener(this));
+    EventManager::getInstance().listen("attack",    new AttackListener(this));
 
     // State changes
     EventManager::getInstance().listen("characterDeath", new CharacterDeathListener(this));
+   //Finish implementing enemy death listener
+    EventManager::getInstance().listen("enemyDeath",     new EnemyDeathListener(this));
     EventManager::getInstance().listen("enterRoom",      new EnterRoomListener(this));
     EventManager::getInstance().listen("victory",        new VictoryListener(this));
     EventManager::getInstance().listen("defeat",         new DefeatListener(this));
@@ -47,18 +52,29 @@ Game::Game() :
     rooms.push_back(new Room("H")); // 7
     rooms.push_back(new Room("I")); // 8
     rooms.push_back(new Room("J")); // 9
+    rooms.push_back(new Room("Graveyard"));
+
+    minions.push_back(new Minion("Smol PP"));
+    bossS.push_back(new Boss("Buff Bitch 9000"));
 
     //                 N         E         S         W
     rooms[0]->setExits(rooms[4], rooms[2], rooms[7], rooms[1]);
     rooms[1]->setExits(nullptr,  rooms[0], nullptr,  nullptr);
-    rooms[1]->addMinion(new Minion("Smol PP"));
+
+    //May need to create minion within game as well as boss
+    rooms[1]->addMinion(minions[0]);
+    minionRooms.push_back(rooms[1]);
+
     rooms[2]->setExits(nullptr,  nullptr,  nullptr,  rooms[0]);
     rooms[3]->setExits(nullptr,  rooms[4], nullptr,  nullptr);
     rooms[4]->setExits(nullptr,  rooms[5], rooms[0], rooms[3]);
     rooms[5]->setExits(nullptr,  nullptr,  nullptr,  rooms[4]);
     rooms[6]->setExits(nullptr,  rooms[7], nullptr,  nullptr);
     rooms[7]->setExits(rooms[0], rooms[8], rooms[9], rooms[6]);
-    rooms[7]->addBoss(new Boss("Buff Bitch 9000"));
+
+    rooms[7]->addBoss(bossS[0]);
+    bossRooms.push_back(rooms[7]);
+    
     rooms[8]->setExits(nullptr,  nullptr,  nullptr,  rooms[7]);
     rooms[9]->setExits(rooms[7], nullptr,  nullptr,  nullptr);
 
@@ -102,6 +118,8 @@ void Game::info()
     cout << " - teleport"         << endl;
     cout << " - map"              << endl;
     cout << " - info"             << endl;
+    //Listener yet to be implemented
+    cout << " - attack"           << endl;
 }
 
 void Game::go(string direction)
@@ -118,11 +136,42 @@ void Game::go(string direction)
 }
 
 void Game::teleport()
-{
-    int selected = rand() % rooms.size();
+{   //Make sure player cant go to graveyard
+    
+    int selected = rand() % (rooms.size()-1);
     player.setCurrentRoom(rooms[selected]);
-    player.setStamina(player.getStamina() - 50);
+    player.setStamina(player.getStamina() - 5);
     EventManager::getInstance().trigger("enterRoom", rooms[selected]);
+}
+
+void Game::attack()
+{
+    //Needs proper event manager
+    if (player.getCurrentRoom() == (minionRooms[0]))
+    {
+        minions[0]->health = (minions[0]->getHealth() - player.getDamage());
+        if (minions[0]->getHealth() < 0)
+        {
+            minionRooms[0] = rooms[10];
+            cout << minions[0]->getName() << " Is dEd" << endl;
+        }
+    }
+
+    //Needs proper event manager
+    if (player.getCurrentRoom() == (bossRooms[0]))
+    {
+        bossS[0]->health = (bossS[0]->getHealth() - player.getDamage());
+        if (bossS[0]->getHealth() < 0)
+        {
+            bossRooms[0] = rooms[10];
+            cout << bossS[0]->getName() << " Is dEd" << endl;
+        }
+    }
+    
+    if (((player.getCurrentRoom() != (bossRooms[0])) && (bossRooms[0] != rooms[10])) && (player.getCurrentRoom() != (minionRooms[0])) && (minionRooms[0] != rooms[10]))
+    {
+        cout << "Nothing here to attack" << endl;
+    }
 }
 
 bool Game::is_over()
@@ -139,16 +188,19 @@ void Game::update_screen()
 {
     if (!gameOver) {
         Room *currentRoom = player.getCurrentRoom();
-        Room* enemyR = rooms[1];
-        Room* bossR = rooms[7];
+        Room* enemyR = minionRooms[0];
+        Room* bossR = bossRooms[0];
 
         cout << endl;
         cout << "You are in " << currentRoom->getName() << endl;
+        cout << "HP: " << player.getHealth() << " ST: " << player.getStamina() << endl;
+        cout << "Inventory: " << player.getInventory() << endl;
+        
         if (currentRoom == enemyR) {
-            cout << enemyR->displayMinion() << endl;
+            cout << enemyR->displayMinion() << "Enemy Health: " << minions[0]->getHealth() << endl;
         }
         else if (currentRoom == bossR) {
-            cout << bossR->displayBoss() << endl;
+            cout << bossR->displayBoss() << "Enemy Health: " << bossS[0]->getHealth() << endl;
         } else {
             cout << "The coast is clear" << endl;
         }
@@ -160,7 +212,7 @@ void Game::update_screen()
         if (currentRoom->getExit("west")  != nullptr) { cout << " west";  }
         cout << endl;
 
-        cout << "HP: " << player.getHealth() << " ST: " << player.getStamina() << endl;
+        
     } else {
         cout << "Type \"restart\" or \"exit\"." << endl;
     }

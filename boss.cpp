@@ -27,3 +27,13 @@ void Boss::setRoom(Room* bossR)
 { 
     currentRoom = bossR;
 }
+
+Room* Boss::getRoom()
+{
+    return currentRoom;
+}
+
+void Boss::killBoss()
+{
+    this->~Boss();
+}
