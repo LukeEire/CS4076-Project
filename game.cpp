@@ -51,13 +51,14 @@ Game::Game() :
     //                 N         E         S         W
     rooms[0]->setExits(rooms[4], rooms[2], rooms[7], rooms[1]);
     rooms[1]->setExits(nullptr,  rooms[0], nullptr,  nullptr);
+    rooms[1]->addMinion(new Minion("Smol PP"));
     rooms[2]->setExits(nullptr,  nullptr,  nullptr,  rooms[0]);
-    rooms[2]->addBoss(new Boss("BBC"));
     rooms[3]->setExits(nullptr,  rooms[4], nullptr,  nullptr);
     rooms[4]->setExits(nullptr,  rooms[5], rooms[0], rooms[3]);
     rooms[5]->setExits(nullptr,  nullptr,  nullptr,  rooms[4]);
     rooms[6]->setExits(nullptr,  rooms[7], nullptr,  nullptr);
     rooms[7]->setExits(rooms[0], rooms[8], rooms[9], rooms[6]);
+    rooms[7]->addBoss(new Boss("Buff Bitch 9000"));
     rooms[8]->setExits(nullptr,  nullptr,  nullptr,  rooms[7]);
     rooms[9]->setExits(rooms[7], nullptr,  nullptr,  nullptr);
 
@@ -139,14 +140,16 @@ void Game::update_screen()
     if (!gameOver) {
         Room *currentRoom = player.getCurrentRoom();
         Room* enemyR = rooms[1];
-        Room* bossR = rooms[2];
+        Room* bossR = rooms[7];
 
         cout << endl;
         cout << "You are in " << currentRoom->getName() << endl;
-        if (currentRoom == enemyR || currentRoom == bossR) {
-            cout << bossR->displayBoss() << endl;
+        if (currentRoom == enemyR) {
+            cout << enemyR->displayMinion() << endl;
         }
-        else {
+        else if (currentRoom == bossR) {
+            cout << bossR->displayBoss() << endl;
+        } else {
             cout << "The coast is clear" << endl;
         }
 

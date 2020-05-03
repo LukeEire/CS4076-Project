@@ -33,4 +33,3 @@ private:
 };
 
 #endif // ENEMY_H
-#pragma once

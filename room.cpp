@@ -33,9 +33,10 @@ void Room::addBoss(Boss* inBoss) {
     bossInRoom.push_back(*inBoss);
 }
 
-void Room::removeBoss(Boss* inEnemy){
-    bossInRoom.erase(std::remove(bossInRoom.begin(), bossInRoom.end(), inEnemy), bossInRoom.end());
+/*void Room::removeBoss(Boss* inBoss){
+    bossInRoom.erase(std::remove(bossInRoom.begin(), bossInRoom.end(), inBoss), bossInRoom.end());
 }
+*/
 
 string Room::displayBoss() {
     string temp = "Enemy Spotted! \nEnemies present = ";
@@ -76,4 +77,50 @@ int Room::isBossInRoom(string inString) {
     }
 }
     
+void Room::addMinion(Minion* inMinion) {
+    minionInRoom.push_back(*inMinion);
+}
 
+/*void Room::removeBoss(Boss* inBoss){
+    bossInRoom.erase(std::remove(bossInRoom.begin(), bossInRoom.end(), inBoss), bossInRoom.end());
+}
+*/
+
+string Room::displayMinion() {
+    string temp = "Enemy Spotted! \nEnemies present = ";
+    int minionCount = (minionInRoom.size());
+    if (minionInRoom.size() < 1) {
+        temp = "The coast is clear";
+    }
+    else if (minionInRoom.size() > 0) {
+        int x = 0;
+        for (int y = minionCount; y > 0; y--) {
+            temp = temp + minionInRoom[x].getName() + " ";
+            x++;
+        }
+    }
+    return temp;
+}
+
+int Room::numberOfMinion() {
+    return minionInRoom.size();
+}
+
+int Room::isMinionInRoom(string inString) {
+    int minionCount = (minionInRoom.size());
+    if (minionInRoom.size() < 1) {
+        return false;
+    }
+    else if (minionInRoom.size() > 0) {
+        int x = 0;
+        for (int n = minionCount; n > 0; n--) {
+            int enemyFlag = inString.compare(minionInRoom[x].getName());
+            if (enemyFlag = 0) {
+                minionInRoom.erase(minionInRoom.begin() + x);
+                return x;
+            }
+            x++;
+        }
+        return -1;
+    }
+}

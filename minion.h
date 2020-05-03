@@ -1,5 +1,5 @@
-#ifndef BOSS_H
-#define BOSS_H
+#ifndef MINION_H
+#define MINION_H
 
 #include<string>
 #include "enemy.h"
@@ -9,16 +9,16 @@ using namespace std;
 class Room;
 
 
-class Boss : public Enemy
+class Minion : public Enemy
 {
 public:
-	Boss(string name);
-	~Boss();
+	Minion(string name);
+	~Minion();
 
 	void setRoom(Room* next) override;
 	void setHealth(int health) override;
 private:
 };
 
-#endif // BOSS_H
+#endif // MINION_H
 
