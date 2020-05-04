@@ -20,7 +20,7 @@ int Dagger::getWeaponDmg()
     return weaponDmg;
 }
 
-string Dagger::getWeaponName()
+string Dagger::getShortDescription()
 {
     return weaponName;
 }

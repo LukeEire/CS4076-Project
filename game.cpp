@@ -58,7 +58,7 @@ Game::Game() :
     rooms.push_back(new Room("J")); // 9
     rooms.push_back(new Room("Graveyard"));
 
-    playerInventory.push_back(new Dagger("Knif"));
+    //playerInventory.push_back(new Dagger("Knif"));
 
     minions.push_back(new Minion("Smol PP"));
     bossS.push_back(new Boss("Buff Bitch 9000"));
@@ -72,12 +72,18 @@ Game::Game() :
     minionRooms.push_back(rooms[1]);
 
     rooms[2]->setExits(nullptr,  nullptr,  nullptr,  rooms[0]);
-    rooms[3]->setExits(nullptr,  rooms[4], nullptr,  nullptr);
-    rooms[4]->setExits(nullptr,  rooms[5], rooms[0], rooms[3]);
-    rooms[5]->setExits(nullptr,  nullptr,  nullptr,  rooms[4]);
-    rooms[6]->setExits(nullptr,  rooms[7], nullptr,  nullptr);
-    rooms[7]->setExits(rooms[0], rooms[8], rooms[9], rooms[6]);
+    rooms[2]->setItem(new Dagger("Knif"));
 
+    rooms[3]->setExits(nullptr,  rooms[4], nullptr,  nullptr);
+
+    rooms[4]->setExits(nullptr,  rooms[5], rooms[0], rooms[3]);
+    
+    rooms[5]->setExits(nullptr,  nullptr,  nullptr,  rooms[4]);
+    
+    rooms[6]->setExits(nullptr,  rooms[7], nullptr,  nullptr);
+    rooms[6]->setItem(new Sword("Slicer"));
+
+    rooms[7]->setExits(rooms[0], rooms[8], rooms[9], rooms[6]);
     rooms[7]->addBoss(bossS[0]);
     bossRooms.push_back(rooms[7]);
     
@@ -200,11 +206,11 @@ void Game::update_screen()
         cout << endl;
         cout << "You are in " << currentRoom->getName() << endl;
         cout << "HP: " << player.getHealth() << " ST: " << player.getStamina() << endl;
-        cout << "Inventory: \n"; 
-        /*for (int i = 0; i < playerInventory.size(); i++)
-        {
-            cout << playerInventory.at(i) << ", " << endl;
-        }*/
+        cout << "Inventory: \n";
+        
+        if (currentRoom->isItemHere() == true) {
+            cout <<"Items in room: " << currentRoom->displayItem() << endl;
+        }
         
         if (currentRoom == enemyR) {
             cout << enemyR->displayMinion() << "Enemy Health: " << minions[0]->getHealth() << endl;
@@ -213,9 +219,6 @@ void Game::update_screen()
             cout << bossR->displayBoss() << "Enemy Health: " << bossS[0]->getHealth() << endl;
         } else {
             cout << "The coast is clear" << endl;
-        }
-        if (std::find(itemRooms.begin(), itemRooms.end(), currentRoom) != itemRooms.end()) {
-            currentRoom->displayItem();
         }
 
         cout << "Exits:";

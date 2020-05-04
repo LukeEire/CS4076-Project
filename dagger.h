@@ -14,7 +14,7 @@ public:
 	~Dagger();
 
 	int getWeaponDmg() override;
-	string getWeaponName() override;
+	string getShortDescription() override;
 private:
 };
 

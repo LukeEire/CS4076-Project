@@ -1,5 +1,6 @@
 #include "character.h"
 #include "eventmanager.h"
+#include "item.h"
 
 Character::Character(string name)
 {
@@ -25,15 +26,19 @@ int Character::getStamina()
     return stamina;
 }
 
-/*string Character::getInventory()
+string Character::getInventory()
 {
     string temp = "";
     for (int i = 0; i < inventory.size(); i++)
     {
-        temp = temp + (inventory[i].getShortDescription()) + ", ";
+        temp = temp + (inventory[i]->getShortDescription()) + ", ";
     }
     return temp;
-}*/
+}
+
+void Character::giveItem(Item* inItem) {
+    this->inventory.push_back(inItem);
+}
 
 int Character::getDamage() {
     return damage;

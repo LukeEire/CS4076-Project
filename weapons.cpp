@@ -14,13 +14,3 @@ Weapon::Weapon()
 Weapon::~Weapon()
 {
 }
-
-/*
-string Weapon::getWeaponName()
-{
-}
-
-int Weapon::getWeaponDmg()
-{
-}
- */

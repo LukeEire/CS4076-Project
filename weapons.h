@@ -15,7 +15,6 @@ public:
 	string weaponName;
 	int weaponDmg;
 	virtual int getWeaponDmg() = 0;
-	virtual string getWeaponName() = 0;
 
 private:
 

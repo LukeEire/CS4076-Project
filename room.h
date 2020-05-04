@@ -30,17 +30,17 @@ public:
     void addMinion(Minion* inMinion);
     int isMinionInRoom(string inString);
 
+    void setItem(Item* inItem);
     string displayItem();
-    int numberOfItems();
-    void addItem(Item* inItem);
-    int isItemInRoom(string inString);
+    bool isItemHere();
+    //vector <Item*> itemsInRoom;
 
 private:
     string name;
     map<string, Room *> exits;
     vector <Boss> bossInRoom;
     vector <Minion> minionInRoom;
-    vector <Item> itemInRoom;
+    vector <Item*> itemsInRoom;
 };
 
 #endif // ROOM_H

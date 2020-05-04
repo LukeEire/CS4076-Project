@@ -1,5 +1,6 @@
 #include "room.h"
 #include "enemy.h"
+#include "game.h"
 #include <algorithm>
 
 Room::Room(string name) :
@@ -27,6 +28,30 @@ void Room::setExits(Room* north, Room* east, Room* south, Room* west)
 Room* Room::getExit(string direction)
 {
     return exits[direction];
+}
+
+void Room::setItem(Item* inItem)
+{
+    itemsInRoom.push_back(inItem);
+}
+
+bool Room::isItemHere()
+{
+    if (this->itemsInRoom.size() > 0) {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+string Room::displayItem() {
+    string temp;
+    if (itemsInRoom.size() > 0) {
+        temp = itemsInRoom[0]->getShortDescription();
+    }
+    return temp;
 }
 
 void Room::addBoss(Boss* inBoss) {
@@ -119,55 +144,6 @@ int Room::isMinionInRoom(string inString) {
             int enemyFlag = inString.compare(minionInRoom[x].getName());
             if (enemyFlag == 0) {
                 minionInRoom.erase(minionInRoom.begin() + x);
-                return x;
-            }
-            x++;
-        }
-        return -1;
-    }
-}
-
-void Room::addItem(Item* inItem) {
-    itemInRoom.push_back(*inItem);
-}
-
-/*void Room::removeBoss(Boss* inBoss){
-    bossInRoom.erase(std::remove(bossInRoom.begin(), bossInRoom.end(), inBoss), bossInRoom.end());
-}
-*/
-
-string Room::displayItem() {
-    string temp = "Enemy Spotted! \nEnemies present = ";
-    int itemCount = (itemInRoom.size());
-    if (itemInRoom.size() < 1) {
-        temp = "";
-    }
-    else if (itemInRoom.size() > 0) {
-        int x = 0;
-        string tempName = itemInRoom[x].getShortDescription() + ", ";
-        for (int y = itemCount; y > 0; y--) {
-            temp = temp + tempName;
-            x++;
-        }
-    }
-    return temp;
-}
-
-int Room::numberOfItems() {
-    return itemInRoom.size();
-}
-
-int Room::isItemInRoom(string inString) {
-    int itemCount = (itemInRoom.size());
-    if (itemInRoom.size() < 1) {
-        return false;
-    }
-    else if (itemInRoom.size() > 0) {
-        int x = 0;
-        for (int n = itemCount; n > 0; n--) {
-            int itemFlag = inString.compare(itemInRoom[x].getShortDescription());
-            if (itemFlag == 0) {
-                itemInRoom.erase(itemInRoom.begin() + x);
                 return x;
             }
             x++;

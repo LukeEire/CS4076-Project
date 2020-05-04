@@ -15,7 +15,7 @@ int Sword::getWeaponDmg()
     return weaponDmg;
 }
 
-string Sword::getWeaponName()
+string Sword::getShortDescription()
 {
     return weaponName;
 }

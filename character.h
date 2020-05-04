@@ -22,6 +22,7 @@ public:
     int    getDamage();
     string getInventory();
     Room* getCurrentRoom();
+    void giveItem(Item* inItem);
 
     void setName(string name);
     void setHealth(int setHealth);
@@ -33,7 +34,7 @@ private:
     int health;
     int stamina;
     int damage;
-   // vector<Item> inventory;
+    vector<Item*> inventory;
     Room* currentRoom;
 };
 

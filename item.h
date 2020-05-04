@@ -19,10 +19,7 @@ public:
 	string description;
 	Item(string description);
 	Item();
-	string getShortDescription();
-	string getLongDescription();
-	int getWeaponCheck();
-	void setWeaponCheck(int weaponCheck);
+	virtual string getShortDescription() = 0;
 };
 
 #endif //ITEM_H
