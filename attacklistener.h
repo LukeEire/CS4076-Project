@@ -14,4 +14,4 @@ private:
     Game* game;
 };
 
-#endif // INFOLISTENER_H
+#endif // ATTACKLISTENER_H

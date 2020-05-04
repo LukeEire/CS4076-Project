@@ -19,10 +19,12 @@ public:
 
     string getName();
     int    getHealth();
-    Room* getCurrentRoom();
+    int    getDamage();
+    virtual Room* getCurrentRoom();
 
     string name;
     int health;
+    int damage;
     Room* currentRoom;
 
     void setName(string name);

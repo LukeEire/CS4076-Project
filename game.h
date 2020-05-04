@@ -21,23 +21,20 @@ public:
     void go(string direction);
     void teleport();
     void attack();
+    void pickup();
 
     void update_screen();
+    void openGate();
 
     Character &getPlayer();
     void setOver(bool over);
     bool is_over();
-    //Dont know if this is needed
-    //void setCurrentRoom(Room *next);
     vector<Item*> items;
+    vector<Room*> rooms;
 
 private:
     Character      player;
-    vector<Room*> rooms;
-    vector<Minion*> minions;
-    vector<Room*> minionRooms;
-    vector<Boss*> bossS;
-    vector<Room*> bossRooms;
+    //vector<Room*> rooms;
     bool           gameOver;
 };
 #endif // GAME_H

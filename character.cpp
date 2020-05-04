@@ -7,7 +7,7 @@ Character::Character(string name)
     this->name = name; // We need to use "this->" to differentiate between the "name" argument and the "name" from the class.
     health = 100;
     stamina = 100;
-    damage = 10;
+    damage = 50;
     currentRoom = nullptr;
 }
 
@@ -29,11 +29,18 @@ int Character::getStamina()
 string Character::getInventory()
 {
     string temp = "";
-    for (int i = 0; i < inventory.size(); i++)
+    if(inventory.size() > 0)
     {
-        temp = temp + (inventory[i]->getShortDescription()) + ", ";
+        for (int i = 0; i < inventory.size(); i++)
+        {
+            temp = temp + (this->inventory[i]->getShortDescription()) + ", ";
+        }
+        return temp;
     }
-    return temp;
+    else 
+    {
+        return temp;
+    }
 }
 
 void Character::giveItem(Item* inItem) {

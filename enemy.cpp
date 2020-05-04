@@ -6,12 +6,14 @@ Enemy::Enemy(string name)
 {
     this->name = name; // We need to use "this->" to differentiate between the "name" argument and the "name" from the class.
     health = 100;
+    damage = 25;
     currentRoom = nullptr;
 }
 
 Enemy::Enemy() {
     this->name = "Minion"; // We need to use "this->" to differentiate between the "name" argument and the "name" from the class.
     health = 10;
+    damage = 10;
     currentRoom = nullptr;
 }
 
@@ -27,6 +29,11 @@ string Enemy::getName()
 int Enemy::getHealth()
 {
     return health;
+}
+
+int Enemy::getDamage()
+{
+    return damage;
 }
 
 void Enemy::setName(string name)
@@ -51,7 +58,7 @@ Room* Enemy::getCurrentRoom()
 }
 
 //Set enemy to stay in one room
-void Enemy::setRoom(Room* enemyR)
+void Enemy::setRoom(Room* inRoom)
 {
-    currentRoom = enemyR;
+    currentRoom = inRoom;
 }

@@ -14,6 +14,7 @@
 #include "maplistener.h"
 #include "infolistener.h"
 #include "attacklistener.h"
+#include "pickuplistener.h"
 #include "restartlistener.h"
 #include "teleportlistener.h"
 #include "exitlistener.h"
@@ -37,6 +38,7 @@ Game::Game() :
     EventManager::getInstance().listen("teleport",  new TeleportListener(this));
     EventManager::getInstance().listen("exit",      new ExitListener(this));
     EventManager::getInstance().listen("attack",    new AttackListener(this));
+    EventManager::getInstance().listen("pickup",    new PickupListener(this));
 
     // State changes
     EventManager::getInstance().listen("characterDeath", new CharacterDeathListener(this));
@@ -45,6 +47,8 @@ Game::Game() :
     EventManager::getInstance().listen("enterRoom",      new EnterRoomListener(this));
     EventManager::getInstance().listen("victory",        new VictoryListener(this));
     EventManager::getInstance().listen("defeat",         new DefeatListener(this));
+
+    int gateflag = 0;
 
     rooms.push_back(new Room("A")); // 0
     rooms.push_back(new Room("B")); // 1
@@ -60,32 +64,27 @@ Game::Game() :
 
     //playerInventory.push_back(new Dagger("Knif"));
 
-    minions.push_back(new Minion("Smol PP"));
-    bossS.push_back(new Boss("Buff Bitch 9000"));
-
     //                 N         E         S         W
     rooms[0]->setExits(rooms[4], rooms[2], rooms[7], rooms[1]);
+
     rooms[1]->setExits(nullptr,  rooms[0], nullptr,  nullptr);
-
-    //May need to create minion within game as well as boss
-    rooms[1]->addMinion(minions[0]);
-    minionRooms.push_back(rooms[1]);
-
+    
     rooms[2]->setExits(nullptr,  nullptr,  nullptr,  rooms[0]);
     rooms[2]->setItem(new Dagger("Knif"));
 
     rooms[3]->setExits(nullptr,  rooms[4], nullptr,  nullptr);
 
     rooms[4]->setExits(nullptr,  rooms[5], rooms[0], rooms[3]);
+    rooms[4]->addEnemy(new Minion("Bitch"));
     
     rooms[5]->setExits(nullptr,  nullptr,  nullptr,  rooms[4]);
     
     rooms[6]->setExits(nullptr,  rooms[7], nullptr,  nullptr);
     rooms[6]->setItem(new Sword("Slicer"));
 
-    rooms[7]->setExits(rooms[0], rooms[8], rooms[9], rooms[6]);
-    rooms[7]->addBoss(bossS[0]);
-    bossRooms.push_back(rooms[7]);
+    //rooms[7]->setExits(rooms[0], rooms[8], rooms[9], rooms[6]);
+    rooms[7]->setExits(rooms[0], rooms[8], nullptr, rooms[6]);
+    rooms[7]->addEnemy(new Boss("Buff Bitch 9000"));
     
     rooms[8]->setExits(nullptr,  nullptr,  nullptr,  rooms[7]);
     rooms[9]->setExits(rooms[7], nullptr,  nullptr,  nullptr);
@@ -132,6 +131,7 @@ void Game::info()
     cout << " - info"             << endl;
     //Listener yet to be implemented
     cout << " - attack"           << endl;
+    cout << " - pickup"           << endl;
 }
 
 void Game::go(string direction)
@@ -155,34 +155,50 @@ void Game::teleport()
     player.setStamina(player.getStamina() - 5);
     EventManager::getInstance().trigger("enterRoom", rooms[selected]);
 }
+void Game::openGate()
+{
+    int gateFlag = 0;
+    if(rooms[7]->enemiesInRoom.size() == 0)
+    { 
+        rooms[7]->setExits(rooms[0], rooms[8], rooms[9], rooms[6]); 
+        int gateFlag = 1;
+        //cout << "A hidden door behind the boss has opened" << endl;
+    }
+}
 
 void Game::attack()
-{
-    //Needs proper event manager
-    if (player.getCurrentRoom() == (minionRooms[0]))
-    {
-        minions[0]->health = (minions[0]->getHealth() - player.getDamage());
-        if (minions[0]->getHealth() < 0)
-        {
-            minionRooms[0] = rooms[10];
-            cout << minions[0]->getName() << " Is dEd" << endl;
-        }
-    }
+{   //Need to remove old system of code but currently does reduce enemy health
 
     //Needs proper event manager
-    if (player.getCurrentRoom() == (bossRooms[0]))
+    if (player.getCurrentRoom()->isEnemyHere() == true)
     {
-        bossS[0]->health = (bossS[0]->getHealth() - player.getDamage());
-        if (bossS[0]->getHealth() < 0)
+        //Might need second vector but unsure
+        player.getCurrentRoom()->enemiesInRoom[0]->health = (player.getCurrentRoom()->enemiesInRoom[0]->getHealth() - player.getDamage());
+        player.setHealth(player.getHealth() - (player.getCurrentRoom()->enemiesInRoom[0]->getDamage()));
+        cout << "Enemy did " << player.getCurrentRoom()->enemiesInRoom[0]->getDamage() << " points of damage" << endl;
+        if (player.getCurrentRoom()->enemiesInRoom[0]->getHealth() < 0)
         {
-            bossRooms[0] = rooms[10];
-            cout << bossS[0]->getName() << " Is dEd" << endl;
+            cout << player.getCurrentRoom()->enemiesInRoom[0]->getName() << " Is dEd" << endl;
+            player.getCurrentRoom()->enemiesInRoom.erase(player.getCurrentRoom()->enemiesInRoom.begin());
+            openGate();
         }
     }
-    
-    if (((player.getCurrentRoom() != (bossRooms[0])) && (bossRooms[0] != rooms[10])) && (player.getCurrentRoom() != (minionRooms[0])) && (minionRooms[0] != rooms[10]))
-    {
+    else {
         cout << "Nothing here to attack" << endl;
+    }
+}
+
+void Game::pickup()
+{   //Need to remove old system of code but currently does reduce enemy health
+
+    //Needs proper event manager
+    if (player.getCurrentRoom()->isItemHere() == true)
+    {
+        player.giveItem(player.getCurrentRoom()->itemsInRoom[0]);
+        player.getCurrentRoom()->itemsInRoom.erase(player.getCurrentRoom()->itemsInRoom.begin());
+    }
+    else {
+        cout << "Nothing here to pick up" << endl;
     }
 }
 
@@ -200,25 +216,20 @@ void Game::update_screen()
 {
     if (!gameOver) {
         Room *currentRoom = player.getCurrentRoom();
-        Room* enemyR = minionRooms[0];
-        Room* bossR = bossRooms[0];
 
         cout << endl;
         cout << "You are in " << currentRoom->getName() << endl;
         cout << "HP: " << player.getHealth() << " ST: " << player.getStamina() << endl;
-        cout << "Inventory: \n";
+        cout << "Inventory: " << player.getInventory() << endl;
         
-        if (currentRoom->isItemHere() == true) {
+        if (currentRoom->isItemHere() == true) 
+        {
             cout <<"Items in room: " << currentRoom->displayItem() << endl;
         }
-        
-        if (currentRoom == enemyR) {
-            cout << enemyR->displayMinion() << "Enemy Health: " << minions[0]->getHealth() << endl;
-        }
-        else if (currentRoom == bossR) {
-            cout << bossR->displayBoss() << "Enemy Health: " << bossS[0]->getHealth() << endl;
-        } else {
-            cout << "The coast is clear" << endl;
+
+        if (currentRoom->isEnemyHere() == true)
+        {
+            cout << currentRoom->displayEnemy() << endl;
         }
 
         cout << "Exits:";

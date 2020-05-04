@@ -15,9 +15,9 @@ public:
 	Minion(string name);
 	~Minion();
 
-	void setRoom(Room* next) override;
+	void setRoom(Room* inRoom) override;
 	void setHealth(int health) override;
-	Room* getRoom();
+	Room* getCurrentRoom() override;
 	void killMinion();
 private:
 };
