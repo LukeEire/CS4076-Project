@@ -37,6 +37,8 @@ private:
     vector<Room*> minionRooms;
     vector<Boss*> bossS;
     vector<Room*> bossRooms;
+    vector<Item*> playerInventory;
+    vector<Room*> itemRooms;
     bool           gameOver;
 };
 #endif // GAME_H

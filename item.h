@@ -9,14 +9,16 @@ using namespace std;
 
 class Item {
 private:
-	string description;
+	//string description;
 	string longDescription;
 	int weightGrams;
 	float value;
 	bool weaponCheck;
 
 public:
+	string description;
 	Item(string description);
+	Item();
 	string getShortDescription();
 	string getLongDescription();
 	int getWeaponCheck();

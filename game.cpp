@@ -5,6 +5,10 @@
 
 #include "eventmanager.h"
 #include "room.h"
+#include "item.h"
+#include "weapons.h"
+#include "dagger.h"
+#include "sword.h"
 
 #include "golistener.h"
 #include "maplistener.h"
@@ -53,6 +57,8 @@ Game::Game() :
     rooms.push_back(new Room("I")); // 8
     rooms.push_back(new Room("J")); // 9
     rooms.push_back(new Room("Graveyard"));
+
+    playerInventory.push_back(new Dagger("Knif"));
 
     minions.push_back(new Minion("Smol PP"));
     bossS.push_back(new Boss("Buff Bitch 9000"));
@@ -194,7 +200,11 @@ void Game::update_screen()
         cout << endl;
         cout << "You are in " << currentRoom->getName() << endl;
         cout << "HP: " << player.getHealth() << " ST: " << player.getStamina() << endl;
-        cout << "Inventory: " << player.getInventory() << endl;
+        cout << "Inventory: \n"; 
+        /*for (int i = 0; i < playerInventory.size(); i++)
+        {
+            cout << playerInventory.at(i) << ", " << endl;
+        }*/
         
         if (currentRoom == enemyR) {
             cout << enemyR->displayMinion() << "Enemy Health: " << minions[0]->getHealth() << endl;
@@ -203,6 +213,9 @@ void Game::update_screen()
             cout << bossR->displayBoss() << "Enemy Health: " << bossS[0]->getHealth() << endl;
         } else {
             cout << "The coast is clear" << endl;
+        }
+        if (std::find(itemRooms.begin(), itemRooms.end(), currentRoom) != itemRooms.end()) {
+            currentRoom->displayItem();
         }
 
         cout << "Exits:";

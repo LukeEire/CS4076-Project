@@ -25,7 +25,7 @@ int Character::getStamina()
     return stamina;
 }
 
-string Character::getInventory()
+/*string Character::getInventory()
 {
     string temp = "";
     for (int i = 0; i < inventory.size(); i++)
@@ -33,7 +33,7 @@ string Character::getInventory()
         temp = temp + (inventory[i].getShortDescription()) + ", ";
     }
     return temp;
-}
+}*/
 
 int Character::getDamage() {
     return damage;

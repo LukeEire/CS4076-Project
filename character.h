@@ -33,7 +33,7 @@ private:
     int health;
     int stamina;
     int damage;
-    vector<Item> inventory;
+   // vector<Item> inventory;
     Room* currentRoom;
 };
 
