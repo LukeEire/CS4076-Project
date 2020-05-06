@@ -70,22 +70,23 @@ Game::Game() :
     rooms[1]->setExits(nullptr,  rooms[0], nullptr,  nullptr);
     
     rooms[2]->setExits(nullptr,  nullptr,  nullptr,  rooms[0]);
+    //Example of polymorphism as Dagger is given to method that takes a parent type
     rooms[2]->setItem(new Dagger("Small Dagger"));
 
     rooms[3]->setExits(nullptr,  rooms[4], nullptr,  nullptr);
     rooms[3]->setItem(new HealthPotion("Health Potion"));
 
     rooms[4]->setExits(nullptr,  rooms[5], rooms[0], rooms[3]);
-    rooms[4]->addEnemy(new Minion("Bitch"));
+    rooms[4]->addEnemy(new Minion("Minion"));
+    rooms[4]->setItem(new StaminaPotion("Stamina Potion"));
     
     rooms[5]->setExits(nullptr,  nullptr,  nullptr,  rooms[4]);
     
     rooms[6]->setExits(nullptr,  rooms[7], nullptr,  nullptr);
     rooms[6]->setItem(new Sword("Slicer"));
 
-    //rooms[7]->setExits(rooms[0], rooms[8], rooms[9], rooms[6]);
     rooms[7]->setExits(rooms[0], rooms[8], nullptr, rooms[6]);
-    rooms[7]->addEnemy(new Boss("Buff Bitch 9000"));
+    rooms[7]->addEnemy(new Boss("Mega Zork Boss"));
     
     rooms[8]->setExits(nullptr,  nullptr,  nullptr,  rooms[7]);
     rooms[9]->setExits(rooms[7], nullptr,  nullptr,  nullptr);
@@ -100,6 +101,17 @@ void Game::reset(bool show_update)
     player.setCurrentRoom(rooms[0]);
     player.setHealth(100);
     player.setStamina(100);
+    player.emptyInventory();
+
+    if (gameOver == true)
+    {
+        rooms[7]->addEnemy(new Boss("Mega Zork Boss"));
+        rooms[4]->addEnemy(new Minion("Minion"));
+        rooms[6]->setItem(new Sword("Slicer"));
+        rooms[2]->setItem(new Dagger("Small Dagger"));
+        rooms[4]->setItem(new StaminaPotion("Stamina Potion"));
+        rooms[3]->setItem(new HealthPotion("Health Potion"));
+    }
 
     cout << "Welcome to Zork!" << endl;
     if (show_update) {
@@ -176,7 +188,7 @@ void Game::attack()
         cout << "Enemy did " << player.getCurrentRoom()->enemiesInRoom[0]->getDamage() << " points of damage" << endl;
         if (player.getCurrentRoom()->enemiesInRoom[0]->getHealth() < 0)
         {
-            cout << player.getCurrentRoom()->enemiesInRoom[0]->getName() << " Is dEd" << endl;
+            cout << player.getCurrentRoom()->enemiesInRoom[0]->getName() << " has been slain" << endl;
             player.getCurrentRoom()->enemiesInRoom.erase(player.getCurrentRoom()->enemiesInRoom.begin());
             openGate();
         }

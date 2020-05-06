@@ -10,7 +10,7 @@ class Potion : public Item
 private:
 
 public:
-	Potion(string weaponName);
+	//Abstract Class
 	Potion();
 	~Potion();
 

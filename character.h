@@ -33,6 +33,7 @@ public:
     void setHealth(int setHealth);
     void setStamina(int stamina);
     void setDamage(int damage);
+    void emptyInventory();
     void setCurrentRoom(Room* next);
     void setHPotionCount(int set);
     void setSPotionCount(int set);

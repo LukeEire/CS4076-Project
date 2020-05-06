@@ -19,6 +19,9 @@ public:
 	string description;
 	Item(string description);
 	Item();
+	~Item();
+
+	//Pure virtual function
 	virtual string getShortDescription() = 0;
 };
 

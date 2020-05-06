@@ -5,7 +5,7 @@
 Boss::Boss(string name)
 {
     this->name = name; // We need to use "this->" to differentiate between the "name" argument and the "name" from the class.
-    health = 75;
+    health = 100;
     damage = 25;
     currentRoom = nullptr;
 }

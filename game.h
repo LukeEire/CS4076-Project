@@ -32,6 +32,7 @@ public:
     vector<Item*> items;
     vector<Room*> rooms;
 
+    //Example of use of friend as well as a uniary operator overload
     friend void operator ++(Character& player);
 
 private:

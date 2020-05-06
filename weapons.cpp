@@ -14,3 +14,8 @@ Weapon::Weapon()
 Weapon::~Weapon()
 {
 }
+
+int Weapon::getWeaponDmg()
+{
+	return this->weaponDmg;
+}

@@ -41,6 +41,11 @@ string Character::getInventory()
     }
 }
 
+void Character::emptyInventory()
+{
+    this->inventory.clear();
+}
+
 void Character::giveItem(Item* inItem) {
     this->inventory.push_back(inItem);
 }

@@ -5,12 +5,6 @@
 #include<string>
 using namespace std;
 
-Potion::Potion(string potionName)
-{
-	description = potionName;
-	value = 20;
-}
-
 Potion::Potion()
 {
 	description = "Unknown Potion";

@@ -5,6 +5,7 @@
 #include "item.h"
 using namespace std;
 
+//Example of Inheritance
 class Weapon : public Item
 {
 public:
@@ -14,7 +15,9 @@ public:
 
 	string weaponName;
 	int weaponDmg;
-	virtual int getWeaponDmg() = 0;
+
+	//Example of virtual function and dynamic dispatch
+	virtual int getWeaponDmg();
 
 private:
 	

@@ -8,3 +8,9 @@ Item::Item() {
     description = "Unknown Item";
 }
 
+//Example of deconstructors used in most classes
+Item::~Item()
+{
+
+}
+
