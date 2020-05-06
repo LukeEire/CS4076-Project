@@ -17,6 +17,6 @@ public:
 	virtual int getWeaponDmg() = 0;
 
 private:
-
+	
 };
 #endif //WEAPONS_H

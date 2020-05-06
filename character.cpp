@@ -3,12 +3,10 @@
 #include "item.h"
 
 Character::Character(string name)
+//initializer list
+    :health(100), stamina(100), damage(10), hPotionCount(0), sPotionCount(0), daggerCount(0), swordCount(0), currentRoom(nullptr)
 {
     this->name = name; // We need to use "this->" to differentiate between the "name" argument and the "name" from the class.
-    health = 100;
-    stamina = 100;
-    damage = 50;
-    currentRoom = nullptr;
 }
 
 string Character::getName()
@@ -81,7 +79,52 @@ void Character::setStamina(int stamina)
     this->stamina = stamina;
 }
 
+void Character::setDamage(int damage)
+{
+    this->damage = damage;
+}
+
 void Character::setCurrentRoom(Room* next)
 {
     currentRoom = next;
+}
+
+int Character::getHPotionCount()
+{
+    return hPotionCount;
+}
+
+void Character::setHPotionCount(int set)
+{
+    hPotionCount = set;
+}
+
+int Character::getSPotionCount()
+{
+    return sPotionCount;
+}
+
+void Character::setSPotionCount(int set)
+{
+    sPotionCount = set;
+}
+
+int Character::getDaggerCount()
+{
+    return daggerCount;
+}
+
+void Character::setDaggerCount(int set)
+{
+    daggerCount = set;
+}
+
+int Character::getSwordCount()
+{
+    return swordCount;
+}
+
+void Character::setSwordCount(int set)
+{
+    swordCount = set;
 }

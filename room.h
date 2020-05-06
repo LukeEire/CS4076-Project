@@ -8,6 +8,7 @@
 #include "boss.h"
 #include "minion.h"
 #include "item.h"
+#include "weapons.h"
 
 using namespace std;
 using std::vector;
@@ -27,6 +28,8 @@ public:
     void setItem(Item* inItem);
     string displayItem();
     bool isItemHere();
+
+    friend ostream& operator << (ostream& out, Weapon& inWeapon);
 
     vector <Enemy*> enemiesInRoom;
     vector <Item*> itemsInRoom;

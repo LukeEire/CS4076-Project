@@ -24,13 +24,15 @@ public:
     void pickup();
 
     void update_screen();
-    void openGate();
+    int openGate();
 
     Character &getPlayer();
     void setOver(bool over);
     bool is_over();
     vector<Item*> items;
     vector<Room*> rooms;
+
+    friend void operator ++(Character& player);
 
 private:
     Character      player;

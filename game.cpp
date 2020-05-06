@@ -9,6 +9,9 @@
 #include "weapons.h"
 #include "dagger.h"
 #include "sword.h"
+#include "potion.h"
+#include "healthpotion.h"
+#include "staminapotion.h"
 
 #include "golistener.h"
 #include "maplistener.h"
@@ -60,9 +63,6 @@ Game::Game() :
     rooms.push_back(new Room("H")); // 7
     rooms.push_back(new Room("I")); // 8
     rooms.push_back(new Room("J")); // 9
-    rooms.push_back(new Room("Graveyard"));
-
-    //playerInventory.push_back(new Dagger("Knif"));
 
     //                 N         E         S         W
     rooms[0]->setExits(rooms[4], rooms[2], rooms[7], rooms[1]);
@@ -70,9 +70,10 @@ Game::Game() :
     rooms[1]->setExits(nullptr,  rooms[0], nullptr,  nullptr);
     
     rooms[2]->setExits(nullptr,  nullptr,  nullptr,  rooms[0]);
-    rooms[2]->setItem(new Dagger("Knif"));
+    rooms[2]->setItem(new Dagger("Small Dagger"));
 
     rooms[3]->setExits(nullptr,  rooms[4], nullptr,  nullptr);
+    rooms[3]->setItem(new HealthPotion("Health Potion"));
 
     rooms[4]->setExits(nullptr,  rooms[5], rooms[0], rooms[3]);
     rooms[4]->addEnemy(new Minion("Bitch"));
@@ -155,24 +156,21 @@ void Game::teleport()
     player.setStamina(player.getStamina() - 5);
     EventManager::getInstance().trigger("enterRoom", rooms[selected]);
 }
-void Game::openGate()
+int Game::openGate()
 {
     int gateFlag = 0;
     if(rooms[7]->enemiesInRoom.size() == 0)
     { 
         rooms[7]->setExits(rooms[0], rooms[8], rooms[9], rooms[6]); 
         int gateFlag = 1;
-        //cout << "A hidden door behind the boss has opened" << endl;
     }
+    return gateFlag;
 }
 
 void Game::attack()
-{   //Need to remove old system of code but currently does reduce enemy health
-
-    //Needs proper event manager
+{ 
     if (player.getCurrentRoom()->isEnemyHere() == true)
     {
-        //Might need second vector but unsure
         player.getCurrentRoom()->enemiesInRoom[0]->health = (player.getCurrentRoom()->enemiesInRoom[0]->getHealth() - player.getDamage());
         player.setHealth(player.getHealth() - (player.getCurrentRoom()->enemiesInRoom[0]->getDamage()));
         cout << "Enemy did " << player.getCurrentRoom()->enemiesInRoom[0]->getDamage() << " points of damage" << endl;
@@ -183,15 +181,24 @@ void Game::attack()
             openGate();
         }
     }
-    else {
+    else
+    {
         cout << "Nothing here to attack" << endl;
     }
 }
 
+void operator++(Character& player)
+{
+    player.setHealth(player.getHealth() + 50);
+}
+
 void Game::pickup()
 {   //Need to remove old system of code but currently does reduce enemy health
+    string hPotionString = "Health Potion";
+    string sPotionString = "Stamina Potion";
+    string swordString = "Slicer";
+    string daggerString = "Small Dagger";
 
-    //Needs proper event manager
     if (player.getCurrentRoom()->isItemHere() == true)
     {
         player.giveItem(player.getCurrentRoom()->itemsInRoom[0]);
@@ -200,6 +207,28 @@ void Game::pickup()
     else {
         cout << "Nothing here to pick up" << endl;
     }
+
+    if ((player.getInventory().find(hPotionString) != std::string::npos) && player.getHPotionCount() < 1) {
+        ++player;
+        player.setHPotionCount(1);
+    }
+
+    if ((player.getInventory().find(sPotionString) != std::string::npos) && player.getSPotionCount() < 1) {
+        player.setSPotionCount(1);
+        player.setStamina(player.getStamina() + 50);
+    }
+
+    if ((player.getInventory().find(daggerString) != std::string::npos) && player.getDaggerCount() < 1) {
+        player.setDaggerCount(1);
+        player.setDamage(player.getDamage() + 10);
+    }
+
+    if ((player.getInventory().find(swordString) != std::string::npos) && player.getSwordCount() < 1) {
+        player.setSwordCount(1);
+        player.setDamage(player.getDamage() + 20);
+    }
+
+
 }
 
 bool Game::is_over()
@@ -232,6 +261,10 @@ void Game::update_screen()
             cout << currentRoom->displayEnemy() << endl;
         }
 
+        if (openGate() == 1) {
+            cout << "A hidden door behind the boss has opened" << endl;
+        }
+
         cout << "Exits:";
         if (currentRoom->getExit("north") != nullptr) { cout << " north"; }
         if (currentRoom->getExit("east")  != nullptr) { cout << " east";  }
@@ -244,3 +277,4 @@ void Game::update_screen()
         cout << "Type \"restart\" or \"exit\"." << endl;
     }
 }
+
